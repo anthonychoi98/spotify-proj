@@ -33,6 +33,11 @@ export default class NavBar extends React.Component{
                     About You
                     </Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link href="/searchuser">
+                    Search User
+                    </Nav.Link>
+                </Nav.Item>
             </Nav>
         );
     }

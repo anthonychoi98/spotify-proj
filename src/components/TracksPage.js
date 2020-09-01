@@ -13,22 +13,19 @@ export default class TracksPage extends React.Component{
 
     constructor(props){
         super(props);
-        console.log(props);
         this.state = {
             tracks: [],
             value: 'short_term',
-            limit: '10',
+            limit: '50',
             currTrack: ''
         };
         this.getTracks = this.getTracks.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleChange2 = this.handleChange2.bind(this);
     }
 
     async getTracks(){
-
         let api = new Api();
-        console.log(this.state.value, this.state.limit);
+
         let arr = await api.getTopTracks(this.state.value, this.state.limit);
       
         this.setState({tracks: arr});
@@ -36,10 +33,6 @@ export default class TracksPage extends React.Component{
 
     handleChange(event) {
         this.setState({value: event.target.value});
-    }
-
-    handleChange2(event) {
-        this.setState({limit: event.target.value});
     }
 
     handlePlay(e, uri){
@@ -57,7 +50,7 @@ export default class TracksPage extends React.Component{
         <div>
             <NavBar activeKey="/tracks"></NavBar>
 
-            <h1>Your Top Tracks!</h1>
+            <h1>{localStorage.getItem('email')} Top Tracks!</h1>
             <div className="tracks-container" style={{maxHeight: 430, overflow: 'scroll', margin:50, marginTop:25}}>
 
                 {this.state.tracks.map((track, indx) => 
@@ -74,12 +67,6 @@ export default class TracksPage extends React.Component{
                     <option value="short_term">Short Term</option>
                     <option value="medium_term">Medium Term</option>
                     <option value="long_term">Long Term</option>
-                </select>
-
-                <select value={this.state.limit} onChange={this.handleChange2} style={{margin:5}}>
-                    <option value="10">Top 10</option>
-                    <option value="20">Top 20</option>
-                    <option value="50">Top 50</option>
                 </select>
 
             </div>

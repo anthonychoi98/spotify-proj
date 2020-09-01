@@ -10,6 +10,7 @@ import TracksPage from './components/TracksPage';
 import Other from './components/Other.js';
 import GenresPage from './components/GenresPage.js';
 import AboutYou from './components/AboutYou.js';
+import SearchUserPage from './components/SearchUserPage.js';
 
 const spotifyApi = new Spotify();
 
@@ -54,6 +55,7 @@ class App extends React.Component{
           <ProtectedRoute exact path="/other" component={Other} />
           <ProtectedRoute exact path="/genres" component={GenresPage}/>
           <ProtectedRoute exact path="/aboutyou" component={AboutYou}/>
+          <ProtectedRoute exact path="/searchuser" component={SearchUserPage}/>
           <Route path="*" component={TracksPage} />
         </Switch>
 

@@ -6,6 +6,23 @@ import { Redirect, BrowserRouter as Router, Route, Switch, useHistory } from 're
 
 class Api extends React.Component{
 
+    async getUserInfo(){
+        let response = await fetch("https://api.spotify.com/v1/me", {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ localStorage.getItem('access_token')
+                }
+            }
+        );
+
+        let json = await response.json();
+    
+        return json;
+
+    }
+
     async getTopArtists(value, limit){
         let arr = [];
         let params = "time_range=" + value + "&limit=" + limit;
@@ -21,11 +38,57 @@ class Api extends React.Component{
     
         let json = await response.json();
 
-        console.log(json.items)
-
         json.items.forEach(item => arr.push(item.name));
 
         return arr;
+    }
+
+    //sql query values can't have names with apostrophes so you have to use double ''
+    formatText = (text) => {
+        var res = text.replace(/'/gi, "''");
+        return res;
+    }
+
+    async getTopUserTracks(email, period){
+        if(period === 'short_term'){
+            let response = await fetch('http://localhost:8888/getshort_term', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email: email})
+              });
+
+            let json = await response.json();
+
+            return json;
+        }
+        else if(period === 'medium_term'){
+            let response = await fetch('http://localhost:8888/getmedium_term', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email: email})
+              });
+            let json = await response.json();
+            return json;
+        }
+        else if(period === 'long_term'){
+            let response = await fetch('http://localhost:8888/getlong_term', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email: email})
+              });
+
+            let json = await response.json();
+            return json;
+        }
     }
 
     async getTopTracks(value, limit){
@@ -44,7 +107,18 @@ class Api extends React.Component{
 
         let json = await response.json();
 
-        json.items.forEach(item => arr.push({name: item.name, artist: item.artists[0].name, uri: item.uri}));
+        json.items.forEach(item => {
+            arr.push({user: localStorage.getItem('email'), name: this.formatText(item.name), artist: this.formatText(item.artists[0].name), uri: item.uri, period: value, date: new Date()});
+        });
+
+        fetch('http://localhost:8888/addTracks', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(arr)
+          });
 
         return arr;
     }  
@@ -65,7 +139,7 @@ class Api extends React.Component{
     
         let json = await response.json();
         
-        json.items.forEach(item => console.log('genres',item.genres));
+        // json.items.forEach(item => console.log('genres',item.genres));
 
         json.items.forEach(item => item.genres.forEach(genre => arr.push(genre)));
 

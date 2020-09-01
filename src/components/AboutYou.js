@@ -84,10 +84,12 @@ export default class AboutYou extends React.Component{
                 <h5>Based on the features of your favorite tracks</h5>
 
                 <div className="tracks-container" style={{maxHeight: 430, overflow: 'scroll', margin:50, marginTop:25}}>
+                See https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/ for more info.
+                <p></p>
                 Danceability (0-1): {this.getAverage(this.state.features, "danceability")}
                 Tempo (bpm): {this.getAverage(this.state.features, "tempo")}
-                Speechiness (wordy songs): {this.getAverage(this.state.features, "speechiness")}
-                Valence (positivity): {this.getAverage(this.state.features, "valence")}
+                Speechiness (wordy songs 0-1): {this.getAverage(this.state.features, "speechiness")}
+                Valence (positivity 0-1): {this.getAverage(this.state.features, "valence")}
                 Energy (intensity): {this.getAverage(this.state.features, "energy")}
                 Duration (min): {this.getAverage(this.state.features, "duration_ms")}
                 

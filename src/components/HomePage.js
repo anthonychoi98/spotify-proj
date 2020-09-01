@@ -5,8 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Spotify from 'spotify-web-api-js';
 import { Redirect, BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
 import NavBar from './NavBar.js';
+import { thisExpression } from '@babel/types';
+import Api from '../Api.js';
 
 const spotifyApi = new Spotify();
+const api = new Api();
 
 class HomePage extends React.Component{
 
@@ -18,7 +21,8 @@ class HomePage extends React.Component{
       nowPlaying:{
         name: 'Not Checked',
         image: ''
-      }
+      },
+      user_email: ''
     }
     if(params.access_token){
       spotifyApi.setAccessToken(params.access_token);
@@ -36,10 +40,7 @@ class HomePage extends React.Component{
     return hashParams;
   }
 
-
-
   handleClick = () => {
-    console.log("redirect?");
     this.props.history.push({
       pathname: '/tracks',
       state: {access_token: spotifyApi.getAccessToken()}
@@ -47,12 +48,17 @@ class HomePage extends React.Component{
  }
 
  handleClick2 = () => {
-  console.log("redirect?");
   this.props.history.push({
     pathname: '/other',
     state: {access_token: spotifyApi.getAccessToken()}
   });
 }
+
+  async getUser(){
+    console.log("get user info...")
+    let user_info = await api.getUserInfo();
+    localStorage.setItem('email', user_info.email);
+  }
 
   render(){
     const size = {
@@ -69,11 +75,24 @@ class HomePage extends React.Component{
 
         <h1 style={{marginTop:25}}>Your Spotify</h1>
 
-          <a href="https://spotifyloginapi.herokuapp.com/login">
-            <Button className="app-button" variant="success" size="lg" style={{marginTop:10, color: 'black'}}>
+        { this.state.loggedIn ? 
+
+        <p>Welcome! 
+
+        Short term: ~ 1 month
+        Medium term: ~ 6 months
+        Long term: ~ 3 years
+        </p> :
+        
+        <a href="https://spotifyloginapi.herokuapp.com/login">
+            <Button onClick={this.getUser} className="app-button" variant="success" size="lg" style={{marginTop:10, color: 'black'}}>
               Log In
             </Button>{' '}
-          </a>          
+          </a>
+          
+        }
+
+                 
       </div>
     );
   }
