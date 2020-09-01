@@ -51,7 +51,7 @@ class Api extends React.Component{
 
     async getTopUserTracks(email, period){
         if(period === 'short_term'){
-            let response = await fetch('http://localhost:8888/getshort_term', {
+            let response = await fetch('https://spotifyloginapi.herokuapp.com/getshort_term', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
@@ -65,7 +65,7 @@ class Api extends React.Component{
             return json;
         }
         else if(period === 'medium_term'){
-            let response = await fetch('http://localhost:8888/getmedium_term', {
+            let response = await fetch('https://spotifyloginapi.herokuapp.com/getmedium_term', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
@@ -77,7 +77,7 @@ class Api extends React.Component{
             return json;
         }
         else if(period === 'long_term'){
-            let response = await fetch('http://localhost:8888/getlong_term', {
+            let response = await fetch('https://spotifyloginapi.herokuapp.com/getlong_term', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
@@ -111,7 +111,7 @@ class Api extends React.Component{
             arr.push({user: localStorage.getItem('email'), name: this.formatText(item.name), artist: this.formatText(item.artists[0].name), uri: item.uri, period: value, date: new Date()});
         });
 
-        fetch('http://localhost:8888/addTracks', {
+        fetch('https://spotifyloginapi.herokuapp.com/addTracks', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
