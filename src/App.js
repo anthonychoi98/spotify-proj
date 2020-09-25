@@ -23,7 +23,7 @@ const ProtectedRoute = ({
     <Route
       {...rest}
       render={props => {
-        if (localStorage.getItem('access_token') && localStorage.getItem('email')) {
+        if (localStorage.getItem('access_token')) {
           return <Component {...props} />;
         } else {
           return (
