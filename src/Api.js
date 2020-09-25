@@ -139,8 +139,6 @@ class Api extends React.Component{
     
         let json = await response.json();
         
-        // json.items.forEach(item => console.log('genres',item.genres));
-
         json.items.forEach(item => item.genres.forEach(genre => arr.push(genre)));
 
         for(var i = 0 ; i < arr.length;i++){

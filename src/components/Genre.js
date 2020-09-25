@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 class Artist extends React.Component{
     constructor(props){
-        super(props);
-        console.log(props);
-  
+        super(props);  
     }
 
     render(){

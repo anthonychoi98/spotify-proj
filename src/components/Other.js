@@ -24,14 +24,8 @@ export default class Other extends React.Component{
 
         let api = new Api();
         let arr = await api.getTopArtists(this.state.value, this.state.limit);
-
-        console.log('arr', typeof(arr));
       
         this.setState({artists: arr});
-
-        if (!Array.isArray(typeof(arr))){
-            console.log('is array', arr);
-        }
     }
 
     handleChange(event) {

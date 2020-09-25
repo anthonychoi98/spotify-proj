@@ -5,7 +5,6 @@ import { Button } from 'react-bootstrap';
 
 class Track extends React.Component{
     constructor(props){
-        console.log(props);
         super(props);
   
     }
@@ -17,7 +16,7 @@ class Track extends React.Component{
             <div className="track" style={{display: 'flex', backgroundColor: "white", border: '1px solid black', borderRadius: '5px', margin:'5px', display: "flex"}}>
                 <h1 className="tracktitle" style={{height: 45, fontSize: 25}}>{this.props.title}</h1>
                 <p style={{fontSize: 15}}>by {this.props.artist}</p>
-                <Button variant="success" onClick={(e) => this.props.onClickCallback(e, this.props.uri)} style={{color: 'black', height:30, width: 45, marginLeft: "auto", marginRight: 8, marginTop: 8}}>|></Button>
+                <Button variant="success" onClick={(e) => this.props.onClickCallback(e, this.props.uri)} style={{color: 'black', height:30, width: 45, marginLeft: "auto", marginRight: 8, marginTop: 8}}>></Button>
             </div>
         ); 
     }

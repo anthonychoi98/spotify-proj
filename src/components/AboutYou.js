@@ -6,7 +6,6 @@ import NavBar from './NavBar';
 export default class AboutYou extends React.Component{
     constructor(props){
         super(props);
-        console.log(props);
         this.state = {
             features:[],
             value: "short_term",
@@ -21,7 +20,6 @@ export default class AboutYou extends React.Component{
         let api = new Api();
         let arr = await api.getFeatures(this.state.value, this.state.limit);
         this.setState({features: arr});
-        console.log(this.state.features);
     }
 
     getAverage(features, feature){
@@ -84,7 +82,7 @@ export default class AboutYou extends React.Component{
                 <h5>Based on the features of your favorite tracks</h5>
 
                 <div className="tracks-container" style={{maxHeight: 430, overflow: 'scroll', margin:50, marginTop:25}}>
-                See https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/ for more info.
+                <a href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/" style={{color: '#28a745'}}>See https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/ for more info.</a>
                 <p></p>
                 Danceability (0-1): {this.getAverage(this.state.features, "danceability")}
                 Tempo (bpm): {this.getAverage(this.state.features, "tempo")}

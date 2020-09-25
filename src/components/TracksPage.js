@@ -19,19 +19,23 @@ export default class TracksPage extends React.Component{
             limit: '50',
             currTrack: ''
         };
+        this.getUser = this.getUser.bind(this);
+        this.getUser();
         this.getTracks = this.getTracks.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.getUser();
     }
 
     async getUser(){
+        console.log('here.....');
         let api = new Api();
         let user_info = await api.getUserInfo();
         localStorage.setItem('email', user_info.email);
-      }
+        console.log('email: ', localStorage.getItem('email'));
+    }
 
     async getTracks(){
-        let api = new Api();
+        let api = new Api();        
+        //get and populate db
         let arr = await api.getTopTracks(this.state.value, this.state.limit);
         this.setState({tracks: arr});
     }

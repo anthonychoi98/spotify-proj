@@ -17,7 +17,7 @@ class HomePage extends React.Component{
     super(props);
     const params = this.getHashParams();
     this.state={
-      loggedIn: params.access_token ? true : false,
+      loggedIn: localStorage.getItem('access_token') ? true : false,
       nowPlaying:{
         name: 'Not Checked',
         image: ''
@@ -40,26 +40,6 @@ class HomePage extends React.Component{
     return hashParams;
   }
 
-  handleClick = () => {
-    this.props.history.push({
-      pathname: '/tracks',
-      state: {access_token: spotifyApi.getAccessToken()}
-    });
- }
-
- handleClick2 = () => {
-  this.props.history.push({
-    pathname: '/other',
-    state: {access_token: spotifyApi.getAccessToken()}
-  });
-}
-
-  async getUser(){
-    console.log("get user info...")
-    let user_info = await api.getUserInfo();
-    localStorage.setItem('email', user_info.email);
-  }
-
   render(){
     const size = {
       width: '100%',
@@ -75,17 +55,18 @@ class HomePage extends React.Component{
 
         <h1 style={{marginTop:25}}>Your Spotify</h1>
 
-        { this.state.loggedIn ? 
+        { (this.state.loggedIn) ? 
 
         <p>Welcome! 
 
         Short term: ~ 1 month
         Medium term: ~ 6 months
         Long term: ~ 3 years
+
         </p> :
         
         <a href="https://spotifyloginapi.herokuapp.com/login">
-            <Button onClick={this.getUser} className="app-button" variant="success" size="lg" style={{marginTop:10, color: 'black'}}>
+            <Button className="app-button" variant="success" size="lg" style={{marginTop:10, color: 'black'}}>
               Log In
             </Button>{' '}
           </a>
