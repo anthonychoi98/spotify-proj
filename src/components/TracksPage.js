@@ -26,11 +26,9 @@ export default class TracksPage extends React.Component{
     }
 
     async getUser(){
-        console.log('here.....');
         let api = new Api();
         let user_info = await api.getUserInfo();
         localStorage.setItem('email', user_info.email);
-        console.log('email: ', localStorage.getItem('email'));
     }
 
     async getTracks(){
@@ -59,7 +57,7 @@ export default class TracksPage extends React.Component{
         <div>
             <NavBar activeKey="/tracks"></NavBar>
 
-            <h1>{localStorage.getItem('email')} Top Tracks!</h1>
+            <h1>{localStorage.getItem('email') ? localStorage.getItem('email') : "" } Top Tracks!</h1>
             <div className="tracks-container" style={{maxHeight: 430, overflow: 'scroll', margin:50, marginTop:25}}>
 
                 {this.state.tracks.map((track, indx) => 

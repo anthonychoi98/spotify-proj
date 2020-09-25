@@ -64,7 +64,6 @@ export default class SearchUserPage extends React.Component{
 
                 <Button variant="success" onClick={() => this.getTracks()} style={{margin: 5, color: 'black'}}>Get Top Tracks</Button>
             
-                {/* tracks box */}
                 <div className="tracks-container" style={{maxHeight: 430, overflow: 'scroll', margin:50, marginTop:20, marginBottom: 25}}>
 
                     {this.state.tracks.map((track, indx) => 

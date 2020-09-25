@@ -8,9 +8,7 @@ class Track extends React.Component{
         super(props);
   
     }
-
     
-
     render(){
         return(
             <div className="track" style={{display: 'flex', backgroundColor: "white", border: '1px solid black', borderRadius: '5px', margin:'5px', display: "flex"}}>
