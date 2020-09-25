@@ -17,7 +17,7 @@ class HomePage extends React.Component{
     super(props);
     const params = this.getHashParams();
     this.state={
-      loggedIn: localStorage.getItem('access_token') ? true : false,
+      loggedIn: params.access_token ? true : false,
       nowPlaying:{
         name: 'Not Checked',
         image: ''
