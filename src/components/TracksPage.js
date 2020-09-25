@@ -21,13 +21,18 @@ export default class TracksPage extends React.Component{
         };
         this.getTracks = this.getTracks.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.getUser();
     }
+
+    async getUser(){
+        let api = new Api();
+        let user_info = await api.getUserInfo();
+        localStorage.setItem('email', user_info.email);
+      }
 
     async getTracks(){
         let api = new Api();
-
         let arr = await api.getTopTracks(this.state.value, this.state.limit);
-      
         this.setState({tracks: arr});
     }
 
