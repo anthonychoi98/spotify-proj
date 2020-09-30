@@ -2,6 +2,8 @@ import React from 'react';
 import Api from '../Api.js';
 import { Button } from 'react-bootstrap';
 import NavBar from './NavBar';
+import { Chart } from 'react-google-charts';
+import Footer from './Footer.js';
 
 export default class AboutYou extends React.Component{
     constructor(props){
@@ -9,17 +11,33 @@ export default class AboutYou extends React.Component{
         this.state = {
             features:[],
             value: "short_term",
-            limit: "5"
+            danceability: 0,
+            tempo: 0,
+            speechiness: 0,
+            valence: 0,
+            energy: 0,
+            duration: 0
         };
         this.getFeatures = this.getFeatures.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleChange2 = this.handleChange2.bind(this);
+    }
+
+    async componentDidMount(){
+        await this.getFeatures();
     }
 
     async getFeatures(){
         let api = new Api();
         let arr = await api.getFeatures(this.state.value, this.state.limit);
         this.setState({features: arr});
+
+        this.getAverage(this.state.features, "danceability");
+        this.getAverage(this.state.features, "tempo");
+        this.getAverage(this.state.features, "speechiness");
+        this.getAverage(this.state.features, "valence");
+        this.getAverage(this.state.features, "energy");
+        this.getAverage(this.state.features, "duration_ms")
+        console.log(this.state);
     }
 
     getAverage(features, feature){
@@ -28,11 +46,15 @@ export default class AboutYou extends React.Component{
             for(var i = 0; i < features.length; i++){
                 average = average + features[i].danceability;
             }
+            average = average / 15;
+            this.setState({danceability: average});
         }
         else if(feature === "tempo"){
             for(var i = 0; i < features.length; i++){
                 average = average + features[i].tempo;
             }
+            average = average / features.length;
+            this.setState({tempo: average/200});
         }
         else if(feature === "duration_ms"){
             for(var i = 0; i < features.length; i++){
@@ -41,60 +63,79 @@ export default class AboutYou extends React.Component{
             //time conversion
             average = average*.001;
             average = average/60;
+            average = average / features.length;
+            this.setState({duration: average/6});
         }
         else if(feature === "speechiness"){
             for(var i = 0; i < features.length; i++){
                 average = average + features[i].speechiness;
             }
+            average = average / features.length;
+            this.setState({speechiness: average});
         }
         else if(feature === "valence"){
             for(var i = 0; i < features.length; i++){
                 average = average + features[i].valence;
             }
+            average = average / features.length;
+            this.setState({valence: average});
         }
         else if(feature === "energy"){
             for(var i = 0; i < features.length; i++){
                 average = average + features[i].energy;
             }
+            average = average / features.length;
+            this.setState({energy: average});
         }
-        
-
-        average = average / features.length;
-
-        return(<p>{average}</p>)
     }
 
     handleChange(event) {
         this.setState({value: event.target.value});
     }
 
-    handleChange2(event) {
-        this.setState({limit: event.target.value});
-    }
-
-
     render(){
         return(
-            <div>
+            <div style={{display:'grid'}}>
                 <NavBar activeKey="/aboutyou"></NavBar>
 
                 <h1>Your Musical Taste</h1>
                 <h5>Based on the features of your favorite tracks</h5>
 
-                <div className="tracks-container" style={{maxHeight: 430, overflow: 'scroll', margin:50, marginTop:25}}>
+                <div className="tracks-container" style={{maxHeight: '90vh', overflow: 'scroll', margin:45}}>
                 <a href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/" style={{color: '#28a745'}}>See https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/ for more info.</a>
+                <Chart
+                    width={'100%'}
+                    height={'60vh'}
+                    chartType="BarChart"
+                    loader={<div>Loading Chart</div>}
+                    data={[
+                        ['Taste', 'Your Stats', 'Average Listener'],
+                        ['Danceability', this.state.danceability, .675],
+                        ['Tempo (1 being 200 bpm)', this.state.tempo, .6],
+                        ['Speechiness (average is .3-.6)', this.state.speechiness, .495],
+                        ['Valence', this.state.valence, .5],
+                        ['Energy', this.state.energy, .75],
+                        ['Duration (1 being 6 minutes)', this.state.duration, .65],
+                    ]}
+                    options={{
+                        title: 'Taste',
+                        chartArea: { width: '50%' },
+                        colors: ['#28a745', 'black'],
+                        hAxis: {
+                        title: 'Scaled scores',
+                        minValue: 0,
+                        },
+                        vAxis: {
+                        title: 'Features',
+                        },
+                    }}
+                    // For tests
+                    rootProps={{ 'data-testid': '4' }}
+                    />
                 <p></p>
-                Danceability (0-1): {this.getAverage(this.state.features, "danceability")}
-                Tempo (bpm): {this.getAverage(this.state.features, "tempo")}
-                Speechiness (wordy songs 0-1): {this.getAverage(this.state.features, "speechiness")}
-                Valence (positivity 0-1): {this.getAverage(this.state.features, "valence")}
-                Energy (intensity): {this.getAverage(this.state.features, "energy")}
-                Duration (min): {this.getAverage(this.state.features, "duration_ms")}
-                
-             
                 </div>
 
-                <div className="buttons" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '-35px'}}>
+                <div className="buttons" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-35px'}}>
 
                     <Button variant="success" onClick={() => this.getFeatures()} style={{margin: 5, color: 'black'}}>Get Features</Button>
 
@@ -103,12 +144,8 @@ export default class AboutYou extends React.Component{
                         <option value="medium_term">Medium Term</option>
                         <option value="long_term">Long Term</option>
                     </select>
-
-                    <select value={this.state.limit} onChange={this.handleChange2} style={{margin:5}}>
-                        <option value="5">Top 5</option>
-                        <option value="10">Top 10</option>
-                    </select>
                 </div>
+                <Footer></Footer>
             </div>
             
         );

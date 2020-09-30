@@ -53,7 +53,7 @@ export default class SearchUserPage extends React.Component{
                 <NavBar activeKey="/searchuser"></NavBar>
 
                 <h4>Enter user's email to see they tracks</h4>
-
+                <p>to see mine: achoi39@ucmerced.edu</p>
                 <input text='email' onChange={this.inputHandler}></input>
 
                 <select value={this.state.value} onChange={this.handleChange} style={{margin:5}}>

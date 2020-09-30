@@ -4,7 +4,8 @@ import Spotify from 'spotify-web-api-js';
 import Track from './Track';
 import NavBar from './NavBar';
 import Api from '../Api.js';
-import Genre from './Genre.js';
+import { Chart } from 'react-google-charts';
+import Footer from './Footer.js';
 
 const spotifyApi = new Spotify();
 
@@ -13,47 +14,65 @@ export default class GenresPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            genres: [],
+            genres: [{genre: 'pseudo_pop:', count: 10}, {genre: 'pseudo_edm:', count: 10}, {genre: 'pseudo_rap:', count: 10}, {genre: 'pseudo_indie:', count: 10},{genre: 'pseudo_rock:', count: 10}],
             value: 'short_term',
-            limit: '50',
-            listLimit: '5'
+            limit: '50'
         };
         this.getGenres = this.getGenres.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleChange2 = this.handleChange2.bind(this);
+    }
+
+    async componentDidMount(){
+        await this.getGenres();
     }
 
     async getGenres(){
-
         let api = new Api();
         let arr = await api.getTopGenres(this.state.value, this.state.limit);
-      
-        this.setState({genres: arr});
+        this.setState({genres: arr.slice(0,5)});
     }
 
     handleChange(event) {
         this.setState({value: event.target.value});
     }
 
-    handleChange2(event) {
-        this.setState({listLimit: event.target.value});
-    }
-
     render(){
         return(
-        <div>
+        <div style={{display:'grid'}}>
             <NavBar activeKey="/genres"></NavBar>
 
             <h1>Your Top Genres!</h1>
-            <div className="genres-container" style={{maxHeight: 500, overflow: 'scroll', margin:50, marginTop:25}}>
+            <div className="genres-container" style={{maxHeight: '65vh', overflow: 'scroll', margin:50, marginTop:25}}>
 
-                {this.state.genres.slice(0, this.state.listLimit).map((genre, indx) => 
-                    <Genre genre={genre.genre} key={indx}></Genre>
-                )}
+            <Chart
+                    width={'100%'}
+                    height={'65vh'}
+                    chartType="PieChart"
+                    loader={<div>Loading Chart</div>}
+                    data={[
+                        ['random', 'Hours per Day'],
+                        [this.state.genres[0].genre, this.state.genres[0].count],
+                        [this.state.genres[1].genre, this.state.genres[1].count],
+                        [this.state.genres[2].genre, this.state.genres[2].count],
+                        [this.state.genres[3].genre, this.state.genres[3].count],
+                        [this.state.genres[4].genre, this.state.genres[4].count],
+                    ]}
+                    options={{
+                        title: 'Genres',
+                        slices: {
+                            0: { color: '#28a745' },
+                            1: { color: 'black' },
+                            2: { color: '#247036'},
+                            3: { color: 'rgb(94, 94, 94)' },
+                            4: { color: '#0f411a' }
+                          }
+                    }}
+                    rootProps={{ 'data-testid': '1' }}
+                    /> 
 
             </div>
 
-            <div className="buttons" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '-35px'}}>
+            <div className="buttons" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-38px'}}>
                 
                 <Button variant="success" onClick={() => this.getGenres()} style={{margin: 5, color: 'black'}}>Get Top Genres</Button>
 
@@ -62,14 +81,8 @@ export default class GenresPage extends React.Component{
                     <option value="medium_term">Medium Term</option>
                     <option value="long_term">Long Term</option>
                 </select>
-
-                <select value={this.state.listLimit} onChange={this.handleChange2} style={{margin:5}}>
-                    <option value="5">Top 5</option>
-                    <option value="10">Top 10</option>
-                    <option value="15">Top 15</option>
-                </select>
-
             </div>
+            <Footer></Footer>
         </div>
         );
     };

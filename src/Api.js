@@ -23,9 +23,9 @@ class Api extends React.Component{
 
     }
 
-    async getTopArtists(value, limit){
+    async getTopArtists(value){
         let arr = [];
-        let params = "time_range=" + value + "&limit=" + limit;
+        let params = "time_range=" + value + "&limit=12";
         let response = await fetch("https://api.spotify.com/v1/me/top/artists?" + params, {
             method: 'GET',
             headers: {
@@ -123,10 +123,10 @@ class Api extends React.Component{
         return arr;
     }  
 
-    async getTopGenres(value, limit){
+    async getTopGenres(value){
         let arr = [];
         let genres=[{genre: 'rap', count: 0}, {genre:'electro', count: 0}, {genre:'american', count: 0}, {genre:'progressive', count: 0}, {genre:'hip hop', count: 0}, {genre: 'korean', count: 0}, {genre: 'hyphy', count: 0}, {genre: 'electronic', count: 0}, {genre: 'trap', count: 0}, {genre: 'edm', count: 0}, {genre: 'indie', count: 0}, {genre: 'pop', count: 0}, {genre: 'alternative', count: 0}, {genre: 'punk', count: 0}, {genre: 'rock', count: 0}, {genre: 'uk', count: 0}, {genre: 'bass', count: 0}, {genre: 'house', count: 0}, {genre: 'metal', count: 0}, {genre: 'dance', count: 0}, {genre: 'j-pop', count: 0}, {genre: 'j-rock', count: 0}, {genre: 'classical', count: 0}, {genre: 'french', count: 0}, {genre: 'techno', count: 0}, {genre: 'spanish', count: 0}, {genre: 'screamo', count: 0}, {genre: 'bay area', count: 0}, {genre: 'funk', count: 0}, {genre: 'modern', count: 0}, {genre: 'contemporary', count: 0}, {genre: 'r&b', count: 0}, {genre: 'soul', count: 0}, {genre: 'country', count: 0}, {genre: 'jazz', count: 0}, {genre: 'blues', count: 0}, {genre: 'folk', count: 0}, {genre: 'latin', count: 0}, {genre: 'k-pop', count: 0}, {genre: 'k-rock', count: 0}, {genre: 'anime', count: 0}];
-        let params = "time_range=" + value + "&limit=" + limit;
+        let params = "time_range=" + value + "&limit=15";
         let response = await fetch("https://api.spotify.com/v1/me/top/artists?" + params, {
             method: 'GET',
             headers: {
@@ -158,7 +158,7 @@ class Api extends React.Component{
     async getFeatures(value, limit){
         let arr = [];
         let features = [];
-        let params = "time_range=" + value + "&limit=" + limit;
+        let params = "time_range=" + value + "&limit=15";
 
         //get track ids
         let response = await fetch("https://api.spotify.com/v1/me/top/tracks?" + params, {

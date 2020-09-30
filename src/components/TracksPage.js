@@ -5,7 +5,7 @@ import Track from './Track';
 import NavBar from './NavBar';
 import Api from '../Api.js';
 import SpotifyPlayer from 'react-spotify-player';
-
+import Footer from './Footer.js';
 
 const spotifyApi = new Spotify();
 
@@ -29,6 +29,10 @@ export default class TracksPage extends React.Component{
         let api = new Api();
         let user_info = await api.getUserInfo();
         localStorage.setItem('email', user_info.email);
+    }
+
+    async componentDidMount(){
+        await this.getTracks();
     }
 
     async getTracks(){
@@ -85,6 +89,7 @@ export default class TracksPage extends React.Component{
                 view={view}
                 theme={theme}
             />
+            <Footer></Footer>
         </div>
         );
     };
